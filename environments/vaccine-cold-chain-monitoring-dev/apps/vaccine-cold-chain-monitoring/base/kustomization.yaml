@@ -1,0 +1,11 @@
+resources:
+- kafka.yaml
+- kafkamonitor.yaml
+
+bases:
+- ../../../services/vaccinemgr
+- ../../../services/refrigeratormgr
+- ../../../services/reeferiotsimulator
+- ../../../services/coldchainmonitoring
+- ../../../services/portalbff
+
