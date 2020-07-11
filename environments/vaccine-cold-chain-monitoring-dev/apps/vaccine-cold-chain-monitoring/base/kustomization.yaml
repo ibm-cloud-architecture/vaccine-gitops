@@ -3,9 +3,10 @@ resources:
 - kafkamonitor.yaml
 
 bases:
-- ../../../services/vaccinemgr
-- ../../../services/refrigeratormgr
+# - ../../../services/vaccinemgr
+# - ../../../services/refrigeratormgr
 - ../../../services/reeferiotsimulator
-- ../../../services/coldchainmonitoring
-- ../../../services/portalbff
+# - ../../../services/coldchainmonitoring
+# - ../../../services/portalbff
+- ../../../services/vaccine-order-ms
 
