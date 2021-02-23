@@ -1,0 +1,9 @@
+apiVersion: kafka.strimzi.io/v1beta1
+kind: KafkaUser
+metadata:
+  name: tls-user
+  labels:
+    strimzi.io/cluster: vaccine-kafka
+spec:
+  authentication:
+    type: tls

@@ -1,4 +1,0 @@
-bases:
-- ../base
-
-namespace: vaccine-cold-chain-monitoring-dev

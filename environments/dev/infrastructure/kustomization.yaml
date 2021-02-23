@@ -1,0 +1,10 @@
+
+resources:
+  - ./namespace.yaml
+  - ./service-account.yaml
+  - ./kafka/kafka-cluster.yaml
+  - ./kafka/kafka-user.yaml
+  - ./kafka/kafka-topics.yaml
+  
+
+namespace: vaccine-solution

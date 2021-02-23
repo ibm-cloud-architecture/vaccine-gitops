@@ -1,0 +1,14 @@
+# bases:
+#  - ../../apps/order-mgt
+
+configMapGenerator:
+  - name: kafka-brokers
+    literals:
+      - KAFKA_BOOTSTRAP_SERVERS="vaccine-kafka-kafka-bootstrap:9093"
+  - name: kafka-topics
+    literals:
+      - ORDER_TOPIC="vaccine.public.orders"
+      - REEFER_TELEMETRY_TOPIC="reefer.telemetries"
+      - SHIPMENT_PLAN_TOPIC="vaccine.shipment.plans"
+generatorOptions:
+  disableNameSuffixHash: true
