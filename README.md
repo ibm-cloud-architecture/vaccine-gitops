@@ -82,15 +82,23 @@ oc adm policy add-scc-to-user anyuid -z vaccine-runtime -n vaccine-solution
 oc get kafkausers
 ```
 
-* Verify topics created
+* Verify the topics created
 
 ```shell
 oc get kafkatopics
+#
+# NAME                     CLUSTER         PARTITIONS   REPLICATION FACTOR   READY
+# reefer.telemetries       vaccine-kafka   3            3                    True
+# test                     vaccine-kafka   1            1                    True
+# vaccine.inventory        vaccine-kafka   1            1                    True
+# vaccine.reefer           vaccine-kafka   1            1                    True
+# vaccine.shipment.plans   vaccine-kafka   1            3                    True
+# vaccine.transportation   vaccine-kafka   1            1                    True
 ```
 
 ## Deploy postgresql
 
-```
+```shell
 oc apply -k environments/dev/infrastructure/postgres
 ```
 
@@ -109,6 +117,13 @@ The env folder includes setting up postgres credentials, Kafka topic names as co
 
 ```shell
 oc apply -k environments/dev/apps/order-mgt
+```
+
+This should deploy the optimization and order mgt.
+
+```shell
+oc get pods
+# 
 ```
 
 ## Delete deployment
