@@ -66,6 +66,8 @@ spec:
         app: vaccineorderms
         app.openshift.io/runtime: quarkus
     spec:
+      terminationGracePeriodSeconds: 30
+      securityContext: {}
       containers:
       - args:
         - -jar
@@ -81,22 +83,24 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.namespace
-        - name: KAFKA_CERT_PATH
+        - name: KAFKA_SSL_TRUSTSTORE_LOCATION
           value: /deployments/certs/server/ca.p12
-        - name: KAFKA_CERT_PWD
+        - name: KAFKA_SSL_TRUSTSTORE_PASSWORD
           valueFrom:
             secretKeyRef:
               key: ca.password
               name: vaccine-kafka-cluster-ca-cert
         - name: KAFKA_USER
           value: tls-user
-        - name: USER_CERT_PWD
+        - name: KAFKA_SSL_KEYSTORE_PASSWORD
           valueFrom:
             secretKeyRef:
               key: user.password
               name: tls-user
-        - name: USER_CERT_PATH
+        - name: KAFKA_SSL_KEYSTORE_LOCATION
           value: /deployments/certs/user/user.p12
+        - name: KAFKA_SSL_KEYSTORE_TYPE
+          value: PKCS12
         - name: JAVA_APP_JAR
           value: /deployments/app.jar
         - name: JAVA_LIB_DIR
@@ -137,7 +141,7 @@ spec:
             path: /q/health/live
             port: 8080
             scheme: HTTP
-          initialDelaySeconds: 0
+          initialDelaySeconds: 10
           periodSeconds: 30
           successThreshold: 1
           timeoutSeconds: 10
@@ -152,7 +156,7 @@ spec:
             path: /q/health/ready
             port: 8080
             scheme: HTTP
-          initialDelaySeconds: 0
+          initialDelaySeconds: 10
           periodSeconds: 30
           successThreshold: 1
           timeoutSeconds: 10

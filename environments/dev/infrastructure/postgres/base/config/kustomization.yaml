@@ -3,7 +3,7 @@
 secretGenerator:
   - name: postgresql-creds
     literals:
-      - url="jdbc:postgresql://postgresql.vaccine-solution.svc:5432/orderdb"
+      - url="jdbc:postgresql://postgres-db-postgresql.vaccine-solution.svc:5432/orderdb"
       - username="postgres"
       - password="supersecret"
 generatorOptions:

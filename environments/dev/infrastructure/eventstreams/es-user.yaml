@@ -1,9 +1,10 @@
-apiVersion: kafka.strimzi.io/v1beta1
+apiVersion: eventstreams.ibm.com/v1beta1
 kind: KafkaUser
 metadata:
   name: tls-user
+  namespace: eventstreams
   labels:
-    strimzi.io/cluster: vaccine-kafka
+    strimzi.io/cluster: eda-dev
 spec:
   authentication:
     type: tls
@@ -30,3 +31,18 @@ spec:
           name: '*'
           patternType: literal
         operation: Read
+      - resource:
+          type: topic
+          name: __schema_
+          patternType: prefix
+        operation: Read
+      - resource:
+          type: topic
+          name: __schema_
+          patternType: prefix
+        operation: Alter
+      - resource:
+          type: transactionalId
+          name: '*'
+          patternType: literal
+        operation: Write
