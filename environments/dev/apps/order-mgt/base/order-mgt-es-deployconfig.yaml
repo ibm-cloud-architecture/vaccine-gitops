@@ -89,7 +89,7 @@ spec:
           valueFrom:
             secretKeyRef:
               key: ca.password
-              name: vaccine-kafka-cluster-ca-cert
+              name: kafka-cluster-ca-cert
         - name: KAFKA_USER
           value: tls-user
         - name: KAFKA_SSL_KEYSTORE_PASSWORD
@@ -106,15 +106,9 @@ spec:
         - name: JAVA_LIB_DIR
           value: /deployments/lib
         - name: KAFKA_BOOTSTRAP_SERVERS
-          valueFrom: 
-            configMapKeyRef:
-              key: KAFKA_BOOTSTRAP_SERVERS
-              name: kafka-brokers
+          value: eda-dev-kafka-bootstrap.eventstreams.svc:9093
         - name: SHIPMENT_PLAN_TOPIC
-          valueFrom: 
-            configMapKeyRef:
-              key: SHIPMENT_PLAN_TOPIC
-              name: kafka-topics      
+          value: vaccine.shipment.plans     
         - name: QUARKUS_DATASOURCE_JDBC_URL
           valueFrom:
             secretKeyRef:
@@ -175,7 +169,7 @@ spec:
         secret:
           defaultMode: 384
           optional: false
-          secretName: vaccine-kafka-cluster-ca-cert
+          secretName: kafka-cluster-ca-cert
       - name: user-cert
         secret:
           defaultMode: 384

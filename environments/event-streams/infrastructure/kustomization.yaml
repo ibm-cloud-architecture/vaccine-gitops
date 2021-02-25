@@ -1,10 +1,12 @@
-# bases:
-#  - ../../apps/order-mgt
 
+resources:
+  - ./namespace.yaml
+  - ./service-account.yaml
+ 
 configMapGenerator:
   - name: kafka-brokers
     literals:
-      - KAFKA_BOOTSTRAP_SERVERS="vaccine-kafka-kafka-bootstrap:9093"
+      - KAFKA_BOOTSTRAP_SERVERS="eda-dev-kafka-bootstrap.eventstreams.svc:9093"
   - name: kafka-topics
     literals:
       - ORDER_TOPIC="vaccine.public.orderevents"
@@ -15,3 +17,5 @@ configMapGenerator:
       - REEFER_TOPIC= "vaccine.reefer"
 generatorOptions:
   disableNameSuffixHash: true
+
+namespace: vaccine-solution

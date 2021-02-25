@@ -1,4 +1,4 @@
-# Gitops for vaccine solution 
+# Gitops for vaccine solution
 
 This repository includes the gitops for the vaccine solution deployment and uses [Kustomize](https://kubernetes.io/docs/tasks/manage-kubernetes-objects/kustomization/) to define the Kubernetes resources and app.
 
