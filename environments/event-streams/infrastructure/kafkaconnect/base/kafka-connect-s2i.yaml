@@ -10,7 +10,7 @@ spec:
   bootstrapServers: eda-dev-kafka-bootstrap.eventstreams.svc:9093
   containers:
     - name: postgres-debezium
-      image: debezium/connect:1.4
+      image: debezium/connect:1.5
   authentication:
     certificateAndKey:
       certificate: user.crt
@@ -46,10 +46,6 @@ spec:
     trustedCertificates:
       - certificate: ca.crt
         secretName: eda-dev-cluster-ca-cert
-#  tls:
-#    trustedCertificates:
-#      - secretName: quickstart-cluster-ca-cert
-#        certificate: ca.crt
 #  authentication:
 #    type: scram-sha-512
 #    username: my-connect-user

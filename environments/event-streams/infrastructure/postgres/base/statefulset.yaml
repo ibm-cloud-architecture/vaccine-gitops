@@ -25,52 +25,18 @@ spec:
         role: master
         app.kubernetes.io/part-of: vaccine-solution
     spec:
-      securityContext:
-        fsGroup: 1001
-      initContainers:
-        - name: init-chmod-data
-          image: docker.io/bitnami/minideb:stretch
-          imagePullPolicy: "Always"
-          resources:
-            requests:
-              cpu: 250m
-              memory: 256Mi
-          command:
-            - /bin/sh
-            - -c
-            - |
-              mkdir -p /bitnami/postgresql/data
-              chmod 700 /bitnami/postgresql/data
-              find /bitnami/postgresql -mindepth 0 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | \
-                xargs chown -R 1001:1001
-              chmod -R 777 /dev/shm
-          securityContext:
-            runAsUser: 0
-          volumeMounts:
-            - name: data
-              mountPath: /bitnami/postgresql
-              subPath:
-            - name: dshm
-              mountPath: /dev/shm
+      securityContext: {}
       containers:
         - name: postgres-db-postgresql
-          image: docker.io/bitnami/postgresql:13.2.0-debian-10-r11
+          image: docker.io/debezium/postgres:11
           imagePullPolicy: "IfNotPresent"
           resources:
             requests:
               cpu: 250m
               memory: 256Mi
-          securityContext:
-            runAsUser: 1001
           env:
-            - name: BITNAMI_DEBUG
-              value: "false"
             - name: POSTGRESQL_PORT_NUMBER
               value: "5432"
-            - name: POSTGRESQL_VOLUME_DIR
-              value: "/bitnami/postgresql"
-            - name: PGDATA
-              value: "/bitnami/postgresql/data"
             - name: POSTGRES_USER
               valueFrom:
                 secretKeyRef:
@@ -107,20 +73,9 @@ spec:
                 - -e
                 - |
                   pg_isready -U "${POSTGRES_USER}" -d "${POSTGRES_DB}" -h 127.0.0.1 -p 5432
-                  [ -f /opt/bitnami/postgresql/tmp/.initialized ]
             initialDelaySeconds: 5
             periodSeconds: 10
             timeoutSeconds: 5
             successThreshold: 1
             failureThreshold: 6
-          volumeMounts:
-            - name: dshm
-              mountPath: /dev/shm
-      volumes:
-        - name: dshm
-          emptyDir:
-            medium: Memory
-            #sizeLimit: 1Gi
-        - name: data
-          emptyDir: {}
-  volumeClaimTemplates: []
+  

@@ -25,18 +25,15 @@ spec:
         role: master
         app.kubernetes.io/part-of: vaccine-solution
     spec:
-      securityContext:
-        fsGroup: 1001
+      securityContext: {}
       containers:
         - name: postgres-db-postgresql
-          image: docker.io/debezium/postgresql
+          image: docker.io/debezium/postgres:13
           imagePullPolicy: "IfNotPresent"
           resources:
             requests:
               cpu: 250m
               memory: 256Mi
-          securityContext:
-            runAsUser: 1001
           env:
             - name: POSTGRESQL_PORT_NUMBER
               value: "5432"
