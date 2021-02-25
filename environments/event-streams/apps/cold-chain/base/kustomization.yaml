@@ -1,5 +1,0 @@
-resources:
-  - ./kafka-topics.yaml
-  - ./configmaps.yaml
-  - ./simulator-deployconfig.yaml
-  - ./monitoring-agent-deployment.yaml

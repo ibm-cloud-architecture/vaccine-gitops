@@ -1,41 +1,67 @@
 # Gitops for vaccine solution
 
-This repository includes the gitops for the vaccine solution deployment and uses [Kustomize](https://kubernetes.io/docs/tasks/manage-kubernetes-objects/kustomization/) to define the Kubernetes resources and app.
+This repository includes the gitops for the vaccine solution deployment and uses [Kustomize](https://kubernetes.io/docs/tasks/manage-kubernetes-objects/kustomization/) to define the Kubernetes resources needed to run the different use cases.
 
-The tree has the following structure, with `infrastructure` to defile kafka and postgres, `env` to define application environment like secrets and configmaps, and `apps` for the different components depending of the use cases to demonstrate.
+The tree has the following structure, with `infrastructure` to defile kafka and postgres, `apps` to define application environment like secrets and configmaps, and the different components depending of the use cases to demonstrate.
 
 ```
+├── apps
+│   └── order-mgt
+│       ├── base
+│       │   ├── kustomization.yaml
+│       │   ├── order-mgt-configmap.yaml
+│       │   ├── order-mgt-deployconfig.yaml
+│       │   ├── voro-configmap.yaml
+│       │   └── voro-deployment.yaml
+│       ├── kustomization.yaml
+│       └── overlays
+│           └── kustomization.yaml
 ├── environments
 │   ├── dev
-│   │   ├── apps
-│   │   │   ├── cold-chain
-│   │   │   └── order-mgt
-│   │   ├── env
-│   │   │   ├── base
-│   │   │   │   ├── kafka-topics-configmap.yaml
-│   │   │   │   ├── kustomization.yaml
-│   │   │   │   └── service-account.yaml
-│   │   │   ├── kustomization.yaml
-│   │   │   └── overlays
-│   │   │       └── kustomization.yaml
-│   │   ├── infrastructure
-│   │   │   ├── kafka-cluster.yaml
-│   │   │   ├── kustomization.yaml
-│   │   │   ├── namespace.yaml
-│   │   │   └── postgres
-│   │   │       ├── base
-│   │   │       │   ├── config
-│   │   │       │   │   ├── kustomization.yaml
-│   │   │       │   │   ├── statefulset.yaml
-│   │   │       │   │   ├── svc-headless.yaml
-│   │   │       │   │   └── svc.yaml
-│   │   │       │   └── kustomization.yaml
-│   │   │       ├── kustomization.yaml
-│   │   │       └── overlays
-│   │   │           ├── kustomization.yaml
-│   │   │           └── service-account-patch.yaml
-│   │   └── kustomization.yaml
-
+│   │   └── infrastructure
+│   │       ├── kafka
+│   │       │   ├── kafka-cluster.yaml
+│   │       │   ├── kafka-topics.yaml
+│   │       │   └── kafka-users.yaml
+│   │       ├── kustomization.yaml
+│   │       ├── namespace.yaml
+│   │       ├── postgres
+│   │       │   ├── base
+│   │       │   │   ├── config
+│   │       │   │   │   ├── kustomization.yaml
+│   │       │   │   │   ├── statefulset.yaml
+│   │       │   │   │   ├── svc-headless.yaml
+│   │       │   │   │   └── svc.yaml
+│   │       │   │   └── kustomization.yaml
+│   │       │   ├── kustomization.yaml
+│   │       │   └── overlays
+│   │       │       ├── kustomization.yaml
+│   │       │       └── service-account-patch.yaml
+│   │       └── service-account.yaml
+│   └── event-streams
+│       └── infrastructure
+│           ├── eventstreams
+│           │   ├── IBMCatalogSource.yaml
+│           │   ├── es-topics.yaml
+│           │   ├── es-user.yaml
+│           │   ├── eventstreams-minimal-prod.yaml
+│           │   ├── eventstreams-prod-3-brokers.yaml
+│           │   ├── kafka-configmap.yaml
+│           │   ├── kustomization.yaml
+│           │   └── namespace.yaml
+│           ├── kustomization.yaml
+│           ├── namespace.yaml
+│           ├── postgres
+│           │   ├── base
+│           │   │   ├── kustomization.yaml
+│           │   │   ├── statefulset.yaml
+│           │   │   ├── svc-headless.yaml
+│           │   │   └── svc.yaml
+│           │   ├── kustomization.yaml
+│           │   └── overlays
+│           │       ├── kustomization.yaml
+│           │       └── service-account-patch.yaml
+│           └── service-account.yaml
 ```
 
 In an attempt to create a CI process that minimizes the amount of infrastructure overhead, our CI process utilizes [GitHub Actions](https://github.com/features/actions) for automated docker image builds. 

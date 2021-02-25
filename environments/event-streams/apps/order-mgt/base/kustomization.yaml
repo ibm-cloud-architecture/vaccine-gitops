@@ -1,4 +1,0 @@
-resources:
-  - ./configmaps.yaml
-  - ./order-mgt-deployconfig.yaml
-  - ./voro-deployment.yaml

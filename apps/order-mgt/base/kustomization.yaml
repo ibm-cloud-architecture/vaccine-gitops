@@ -1,0 +1,6 @@
+resources:
+  - ./order-mgt-configmap.yaml
+  - ./order-mgt-deployconfig.yaml
+#  - ./voro-configmap.yaml
+#  - ./voro-deployment.yaml
+namespace: vaccine-solution

@@ -4,7 +4,7 @@ metadata:
   name: tls-user
   namespace: eventstreams
   labels:
-    strimzi.io/cluster: eda-dev
+    eventstreams.ibm.com/cluster: eda-dev
 spec:
   authentication:
     type: tls

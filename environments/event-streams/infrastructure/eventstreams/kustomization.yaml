@@ -2,7 +2,6 @@
 resources:
   - ./namespace.yaml
   - ./IBMCatalogSource.yaml
-  - ./service-account.yaml
   - ./eventstreams-minimal-prod.yaml
   - ./es-user.yaml
   - ./es-topics.yaml

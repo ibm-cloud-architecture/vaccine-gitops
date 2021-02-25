@@ -89,7 +89,7 @@ spec:
           valueFrom:
             secretKeyRef:
               key: ca.password
-              name: vaccine-kafka-cluster-ca-cert
+              name: kafka-cluster-ca-cert
         - name: KAFKA_USER
           value: tls-user
         - name: KAFKA_SSL_KEYSTORE_PASSWORD
@@ -105,16 +105,6 @@ spec:
           value: /deployments/app.jar
         - name: JAVA_LIB_DIR
           value: /deployments/lib
-        - name: KAFKA_BOOTSTRAP_SERVERS
-          valueFrom: 
-            configMapKeyRef:
-              key: KAFKA_BOOTSTRAP_SERVERS
-              name: kafka-brokers
-        - name: SHIPMENT_PLAN_TOPIC
-          valueFrom: 
-            configMapKeyRef:
-              key: SHIPMENT_PLAN_TOPIC
-              name: kafka-topics      
         - name: QUARKUS_DATASOURCE_JDBC_URL
           valueFrom:
             secretKeyRef:
@@ -133,6 +123,8 @@ spec:
         envFrom:
         - configMapRef:
             name: vaccine-order-ms-cm
+        - configMapRef:
+            name: kafka-cm
         image: ibmcase/vaccineorderms:0.0.2
         imagePullPolicy: Always
         livenessProbe:
@@ -173,12 +165,10 @@ spec:
       volumes:
       - name: kafka-cert
         secret:
-          defaultMode: 384
           optional: false
-          secretName: vaccine-kafka-cluster-ca-cert
+          secretName: kafka-cluster-ca-cert
       - name: user-cert
         secret:
-          defaultMode: 384
           optional: false
           secretName: tls-user
 ---
