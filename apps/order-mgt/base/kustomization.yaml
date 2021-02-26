@@ -1,6 +1,9 @@
 resources:
   - ./order-mgt-configmap.yaml
   - ./order-mgt-deployconfig.yaml
+  - ./transportation-configmap.yaml
+  - ./transportation-secret.yaml
+  - ./transportation-deployconfig.yaml
 #  - ./voro-configmap.yaml
 #  - ./voro-deployment.yaml
 namespace: vaccine-solution

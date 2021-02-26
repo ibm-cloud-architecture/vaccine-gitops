@@ -28,7 +28,7 @@ spec:
       securityContext: {}
       containers:
         - name: postgres-db-postgresql
-          image: docker.io/debezium/postgres:13
+          image: docker.io/debezium/postgres:11
           imagePullPolicy: "IfNotPresent"
           resources:
             requests:

@@ -129,31 +129,26 @@ oc apply -k environments/dev/infrastructure/postgres
 ```
 
 
-## Defining environment
-
-The env folder includes setting up postgres credentials, Kafka topic names as config maps and service account. Normally deploying the `dev` environments will configure everything, but in case of we want to go step by step the following command will define the environment variables. Also it is important to modify the namespace if you do not use vaccine-solution as namespace.
-
-```shell
- oc apply -k dev/env
-```
-
 ## Deploying Vaccine cold chain monitoring components
 
 ## Deploying order management components
 
 ```shell
-oc apply -k environments/dev/apps/order-mgt
+oc apply -k ./apps/order-mgt
 ```
 
 This should deploy the optimization and order mgt.
 
 ```shell
 oc get pods
-# 
+# NAME                                   READY   STATUS      RESTARTS   AGE
+# postgres-db-postgresql-0               1/1     Running     0          19h
+# vaccine-transport-simulator-2-mcnnp    1/1     Running     0          3m37s
+# vaccineorderms-2-2lctx                 1/1     Running     0          6m30s
 ```
 
 ## Delete deployment
 
 ```shell
-oc delete -k environments/dev
+oc delete -k ./apps/order-mgt
 ```
