@@ -1,39 +1,3 @@
-apiVersion: v1
-kind: Service
-metadata:
-  name: vaccine-order-optimizer
-  namespace: vaccine-solution
-  labels:
-    name: vaccine-order-optimizer
-    app: vaccine-order-optimizer
-spec:
-  ports:
-    - name: web
-      protocol: TCP
-      port: 5000
-      targetPort: 5000
-  selector:
-    app: vaccine-order-optimizer
-  type: ClusterIP
-  sessionAffinity: None
----
-kind: Route
-apiVersion: route.openshift.io/v1
-metadata:
-  name: vaccine-order-optimizer
-  namespace: vaccine-solution
-  labels:
-    app: vaccine-order-optimizer
-spec:
-  path: /
-  to:
-    kind: Service
-    name: vaccine-order-optimizer
-    weight: 100
-  port:
-    targetPort: 5000
-  wildcardPolicy: None
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:

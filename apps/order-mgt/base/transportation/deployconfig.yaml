@@ -1,39 +1,4 @@
-apiVersion: v1
-kind: Service
-metadata:
-  annotations:
-    app.quarkus.io/build-timestamp: 2021-02-26 - 02:22:44 +0000
-    app.openshift.io/vcs-url: https://github.com/ibm-cloud-architecture/vaccine-transport-simulator.git
-    app.quarkus.io/commit-id: dec56d1454612b1ba505d1d96324f29d7dc7016c
-    app.quarkus.io/vcs-url: https://github.com/ibm-cloud-architecture/vaccine-transport-simulator.git
-  labels:
-    app.kubernetes.io/name: vaccine-transport-simulator
-    app.kubernetes.io/version: 1.0.0
-    app: vaccinetransport
-    app.openshift.io/runtime: quarkus
-  name: vaccine-transport-simulator
-spec:
-  ports:
-  - name: http
-    port: 8080
-    targetPort: 8080
-  selector:
-    app.kubernetes.io/name: vaccine-transport-simulator
-    app.kubernetes.io/version: 1.0.0
-  type: ClusterIP
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
-metadata:
-  name: vaccine-transport-simulator-view
-roleRef:
-  kind: ClusterRole
-  apiGroup: rbac.authorization.k8s.io
-  name: view
-subjects:
-- kind: ServiceAccount
-  name: vaccine-runtime
----
+
 apiVersion: apps.openshift.io/v1
 kind: DeploymentConfig
 metadata:
@@ -132,23 +97,3 @@ spec:
         secret:
           optional: false
           secretName: kafka-cluster-ca-cert
----
-apiVersion: route.openshift.io/v1
-kind: Route
-metadata:
-  annotations:
-    app.quarkus.io/vcs-url: https://github.com/ibm-cloud-architecture/vaccine-transport-simulator.git
-  labels:
-    app.kubernetes.io/name: vaccine-transport-simulator
-    app.kubernetes.io/version: 1.0.0
-    app: vaccinetransport
-    app.openshift.io/runtime: quarkus
-  name: vaccine-transport-simulator
-spec:
-  host: ""
-  path: /
-  port:
-    targetPort: 8080
-  to:
-    kind: Service
-    name: vaccine-transport-simulator

@@ -2,66 +2,44 @@
 
 This repository includes the gitops for the vaccine solution deployment and uses [Kustomize](https://kubernetes.io/docs/tasks/manage-kubernetes-objects/kustomization/) to define the Kubernetes resources needed to run the different use cases.
 
-The tree has the following structure, with `infrastructure` to defile kafka and postgres, `apps` to define application environment like secrets and configmaps, and the different components depending of the use cases to demonstrate.
+The tree has the following structure, with `infrastructure` to defile Kafka and Postgresql, `apps` to define application environment like secrets and configmaps, and the different components depending of the use cases (cold-chain, order-mgt) to demonstrate.
 
 ```
 ├── apps
+│   ├── cold-chain
+│   │   ├── base
+│   │   │   ├── kustomization.yaml
+│   │   │   ├── monitoring-agent
+│   │   │   │   ├── configmap.yaml
+│   │   │   │   ├── deployment.yaml
+│   │   │   │   ├── rolebinding.yaml
+│   │   │   │   ├── route.yaml
+│   │   │   │   ├── secret.yaml
+│   │   │   │   ├── service-account.yaml
+│   │   │   │   └── service.yaml
+│   │   │   └── reefer-simulator
+│   │   │       ├── configmap.yaml
+│   │   │       ├── deployment.yaml
+│   │   │       ├── route.yaml
+│   │   │       └── service.yaml
+│   │   ├── kustomization.yaml
+│   │   └── overlays
+│   │       └── kustomization.yaml
 │   └── order-mgt
 │       ├── base
 │       │   ├── kustomization.yaml
-│       │   ├── order-mgt-configmap.yaml
-│       │   ├── order-mgt-deployconfig.yaml
+│       │   ├── order-mgt
+│       │   │   ├── configmap.yaml
+│       │   │   └── deployconfig.yaml
+│       │   ├── transportation
+│       │   │   ├── configmap.yaml
+│       │   │   └── deployconfig.yaml
+│       │   ├── voro
 │       │   ├── voro-configmap.yaml
 │       │   └── voro-deployment.yaml
 │       ├── kustomization.yaml
 │       └── overlays
 │           └── kustomization.yaml
-├── environments
-│   ├── dev
-│   │   └── infrastructure
-│   │       ├── kafka
-│   │       │   ├── kafka-cluster.yaml
-│   │       │   ├── kafka-topics.yaml
-│   │       │   └── kafka-users.yaml
-│   │       ├── kustomization.yaml
-│   │       ├── namespace.yaml
-│   │       ├── postgres
-│   │       │   ├── base
-│   │       │   │   ├── config
-│   │       │   │   │   ├── kustomization.yaml
-│   │       │   │   │   ├── statefulset.yaml
-│   │       │   │   │   ├── svc-headless.yaml
-│   │       │   │   │   └── svc.yaml
-│   │       │   │   └── kustomization.yaml
-│   │       │   ├── kustomization.yaml
-│   │       │   └── overlays
-│   │       │       ├── kustomization.yaml
-│   │       │       └── service-account-patch.yaml
-│   │       └── service-account.yaml
-│   └── event-streams
-│       └── infrastructure
-│           ├── eventstreams
-│           │   ├── IBMCatalogSource.yaml
-│           │   ├── es-topics.yaml
-│           │   ├── es-user.yaml
-│           │   ├── eventstreams-minimal-prod.yaml
-│           │   ├── eventstreams-prod-3-brokers.yaml
-│           │   ├── kafka-configmap.yaml
-│           │   ├── kustomization.yaml
-│           │   └── namespace.yaml
-│           ├── kustomization.yaml
-│           ├── namespace.yaml
-│           ├── postgres
-│           │   ├── base
-│           │   │   ├── kustomization.yaml
-│           │   │   ├── statefulset.yaml
-│           │   │   ├── svc-headless.yaml
-│           │   │   └── svc.yaml
-│           │   ├── kustomization.yaml
-│           │   └── overlays
-│           │       ├── kustomization.yaml
-│           │       └── service-account-patch.yaml
-│           └── service-account.yaml
 ```
 
 In an attempt to create a CI process that minimizes the amount of infrastructure overhead, our CI process utilizes [GitHub Actions](https://github.com/features/actions) for automated docker image builds. 

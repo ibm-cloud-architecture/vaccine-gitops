@@ -4,7 +4,7 @@ metadata:
   name: vaccine.shipment.plans
   namespace: eventstreams
   labels:
-    strimzi.io/cluster: eda-dev
+    eventstreams.ibm.com/cluster: eda-dev
 spec:
   partitions: 1
   replicas: 3
@@ -16,7 +16,7 @@ metadata:
   name: reefer.telemetries
   namespace: eventstreams
   labels:
-    strimzi.io/cluster: eda-dev
+    eventstreams.ibm.com/cluster: eda-dev
 spec:
   partitions: 3
   replicas: 3
@@ -28,7 +28,7 @@ metadata:
   name: test
   namespace: eventstreams
   labels:
-    strimzi.io/cluster: eda-dev
+    eventstreams.ibm.com/cluster: eda-dev
 spec:
   partitions: 1
   replicas: 1
@@ -39,7 +39,7 @@ metadata:
   name: vaccine.inventory
   namespace: eventstreams
   labels:
-    strimzi.io/cluster: eda-dev
+    eventstreams.ibm.com/cluster: eda-dev
 spec:
   partitions: 1
   replicas: 1
@@ -50,7 +50,7 @@ metadata:
   name: vaccine.transportation
   namespace: eventstreams
   labels:
-    strimzi.io/cluster: eda-dev
+    eventstreams.ibm.com/cluster: eda-dev
 spec:
   partitions: 1
   replicas: 1
@@ -61,7 +61,7 @@ metadata:
   name: vaccine.reefer
   namespace: eventstreams
   labels:
-    strimzi.io/cluster: eda-dev
+    eventstreams.ibm.com/cluster: eda-dev
 spec:
   partitions: 1
   replicas: 1
