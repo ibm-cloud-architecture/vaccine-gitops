@@ -5,9 +5,6 @@ scriptDir=$(dirname $0)
 ### PARAMETERS ###
 ##################
 
-
-
-
 source ${scriptDir}/env.sh
 
 ###################################
@@ -42,19 +39,17 @@ echo "Create secret for topic name and bootstrap server URL"
 echo "#####################################################"
 
 KAFKA_BOOTSTRAP=$(oc get route -n ${KAFKA_NS} ${KAFKA_CLUSTER_NAME}-kafka-bootstrap -o jsonpath="{.status.ingress[0].host}:443")
-if [[ -z $(oc get secret reefer-simul-secret) ]]
+if [[ -z $(oc get secret vaccine-order-secrets) ]]
 then
-    oc create secret generic reefer-simul-secret --from-literal=KAFKA_BOOTSTRAP_SERVERS=$KAFKA_BOOTSTRAP --from-literal=KAFKA_MAIN_TOPIC=$YOUR_TELEMETRIES_TOPIC
+    oc create secret generic reefer-order-secret \
+    --from-literal=SHIPMENT_PLAN_TOPIC=$YOUR_SHIPMENT_PLAN_TOPIC \
+    --from-literal=KAFKA_BOOTSTRAP_SERVERS=$INTERNAL_KAFKA_BOOTSTRAP_SERVERS
 fi
-if [[ -z $(oc get secret reefer-monitoring-agent-secret) ]]
+if [[ -z $(oc get secret vaccine-transport-secrets) ]]
 then
-    oc create secret generic reefer-monitoring-agent-secret \
-    --from-literal=TELEMETRY_TOPIC=$YOUR_TELEMETRIES_TOPIC \
-    --from-literal=REEFER_TOPIC=$YOUR_REEFER_TOPIC \
-    --from-literal=CP4D_USER=$YOUR_CP4D_USER \
-    --from-literal=CP4D_API_KEY=$YOUR_CP4D_API_KEY \
-    --from-literal=CP4D_AUTH_URL=$YOUR_CP4D_AUTH_URL \
-    --from-literal=ANOMALY_DETECTION_URL=$ANOMALY_DETECTION_URL
+    oc create secret generic vaccine-transport-secrets \
+    --from-literal=KAFKA_BOOTSTRAP_SERVERS=$EXTERNAL_KAFKA_BOOTSTRAP_SERVERS \
+    --from-literal=SCHEMA_REGISTRY_URL=$SCHEMA_REGISTRY_URL
 fi
 
 echo "#############"
@@ -73,8 +68,12 @@ then
 else
     echo "${SCRAM_USER} present"
 fi
-# As the project is personal to the user, we can keep a generic name for the secret
-oc get secret ${SCRAM_USER} -n ${KAFKA_NS} -o json |  jq -r '.metadata.name="scram-user"' | jq -r '.metadata.namespace="'${YOUR_PROJECT_NAME}'"' | oc apply -f -
+
+if [[ -z $(oc get secret ${SCRAM_USER}) ]]
+then
+    # As the project is personal to the user, we can keep a generic name for the secret
+    oc get secret ${SCRAM_USER} -n ${KAFKA_NS} -o json |  jq -r '.metadata.name="scram-user"' | jq -r '.metadata.namespace="'${YOUR_PROJECT_NAME}'"' | oc apply -f -
+fi
 
 if [[ -z $(oc get secret ${TLS_USER} -n ${KAFKA_NS}) ]]
 then
@@ -86,8 +85,12 @@ else
     echo "${TLS_USER} present"
 fi
 
-# As the project is personal to the user, we can keep a generic name for the secret
-oc get secret ${TLS_USER} -n ${KAFKA_NS} -o json | jq -r '.metadata.name="tls-user"' | jq -r '.metadata.namespace="'${PROJECT_NAME}'"' | oc apply -f -
+if [[ -z $(oc get secret ${SCRAM_USER}) ]]
+then
+   # As the project is personal to the user, we can keep a generic name for the secret
+   oc get secret ${TLS_USER} -n ${KAFKA_NS} -o json | jq -r '.metadata.name="tls-user"' | jq -r '.metadata.namespace="'${PROJECT_NAME}'"' | oc apply -f -
+fi
+
 
 if [[ -z $(oc get secret kafka-cluster-ca-cert) ]]
 then
@@ -95,17 +98,24 @@ then
 fi
 
 
+if [[ -z $(oc get secret postgresql-creds ) ]]
+then
+  echo "#################"
+  echo "Deploy postgresql"
+  echo "#################"
+  oc apply -k environments/postgres
+fi 
 
 echo "DEPLOY APPLICATION MICROSERVICES"
-oc apply -k apps/cold-chain
+oc apply -k apps/order-mgt
 
 ### GET ROUTE FOR USER INTERFACE MICROSERVICE
-echo "User Interface Microservice is available via http://$(oc get route oc vaccine-reefer-simulator -o jsonpath='{.status.ingress[0].host}')"
-
+echo "User Interface Microservice is available via http://$(oc get route oc vaccine-order-mgt -o jsonpath='{.status.ingress[0].host}')"
 
 echo "#############"
 echo "# Done ! "
 echo "#############"
 oc get pods 
 echo "#############"
-echo "When you are done with the lab do: ... ./scripts/deleteColdChain.sh" 
+echo "When you are done with the lab do: ... ./scripts/deleteOrderOptim.sh" 
+

@@ -2,7 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: vaccine-order-optimizer
-  namespace: vaccine-solution
   labels:
     app: vaccine-order-optimizer
 spec:

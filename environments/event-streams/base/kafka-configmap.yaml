@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: kafka-cm
+  name: kafka-topic
 data:
   KAFKA_BOOTSTRAP_SERVERS: eda-dev-kafka-bootstrap.eventstreams.svc:9093
   ORDER_TOPIC: "vaccine.public.orderevents"

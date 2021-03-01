@@ -27,15 +27,13 @@ function createProjectAndServiceAccount {
     echo ###############################
     echo # Create project if not exist #
     echo ###############################
-    PROJECT_EXIST=$(oc get ns $YOUR_PROJECT_NAME | grep Error)
-    if [[ -n  $PROJECT_EXIST ]]
+    PROJECT_EXIST=$(oc get ns $YOUR_PROJECT_NAME)
+    if [[ -z  $PROJECT_EXIST ]]
     then
         echo "Create $YOUR_PROJECT_NAME"
         oc new-project ${YOUR_PROJECT_NAME}
-    else
-        oc project ${YOUR_PROJECT_NAME}
     fi
-
+    oc project ${YOUR_PROJECT_NAME}
     if [[ -z $(oc get sa | grep $SA_NAME) ]]
     then
       oc apply -f ${ENVPATH}/infrastructure/service-account.yaml

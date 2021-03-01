@@ -30,5 +30,5 @@ patches:
     kind: KafkaUser
     name: $BASENAME
 EOF
-kustomize build $ENVPATH/overlays/
+kustomize build $ENVPATH/overlays/ > $ENVPATH/overlays/$USER_NAME.yaml
 }

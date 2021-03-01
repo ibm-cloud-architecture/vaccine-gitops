@@ -1,8 +1,13 @@
 resources:
   - ./order-mgt/configmap.yaml
   - ./order-mgt/deployconfig.yaml
+  - ./order-mgt/rolebinding.yaml
+  - ./order-mgt/service.yaml
+  - ./order-mgt/route.yaml
   - ./transportation/configmap.yaml
   - ./transportation/deployconfig.yaml
+  - ./transportation/rolebinding.yaml
+  - ./transportation/route.yaml
+  - ./transportation/service.yaml
 #  - ./voro-configmap.yaml
 #  - ./voro-deployment.yaml
-namespace: vaccine-solution
