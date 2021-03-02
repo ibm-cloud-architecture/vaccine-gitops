@@ -1,4 +1,4 @@
-oc delete -k apps/cold-chain
+oc delete -k apps/cold-chain-use-case
 oc delete secret tls-user
 oc delete secret scram-user
 oc delete secret tls-user
