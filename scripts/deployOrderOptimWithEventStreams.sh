@@ -39,7 +39,7 @@ echo "Create secret for topic name and bootstrap server URL"
 echo "#####################################################"
 
 KAFKA_BOOTSTRAP=$(oc get route -n ${KAFKA_NS} ${KAFKA_CLUSTER_NAME}-kafka-bootstrap -o jsonpath="{.status.ingress[0].host}:443")
-if [[ -z $(oc get secret vaccine-order-secrets) ]]
+if [[ -z $(oc get secret vaccine-order-secrets 2> /dev/null) ]]
 then
     oc create secret generic reefer-order-secret \
     --from-literal=SHIPMENT_PLAN_TOPIC=$YOUR_SHIPMENT_PLAN_TOPIC \
@@ -57,7 +57,7 @@ echo "Define users"
 echo "#############"
 source ${scriptDir}/defineUser.sh
 
-if [[ -z $(oc get secret ${SCRAM_USER} -n ${KAFKA_NS}) ]]
+if [[ -z $(oc get secret ${SCRAM_USER} -n ${KAFKA_NS} 2> /dev/null) ]]
 then
     defineUser ${SCRAM_USER} ${KAFKA_CLUSTER_NAME} scram-user ${ENVPATH}
     # THERE IS A BUG in oc or kubectl kustomize that is not parsing the json
@@ -66,39 +66,42 @@ then
     sleep 5
     
 else
-    echo "${SCRAM_USER} present"
+    echo "${SCRAM_USER} presents"
 fi
 
-if [[ -z $(oc get secret ${SCRAM_USER}) ]]
+if [[ -z $(oc get secret ${SCRAM_USER} 2> /dev/null) ]]
 then
     # As the project is personal to the user, we can keep a generic name for the secret
     oc get secret ${SCRAM_USER} -n ${KAFKA_NS} -o json |  jq -r '.metadata.name="scram-user"' | jq -r '.metadata.namespace="'${YOUR_PROJECT_NAME}'"' | oc apply -f -
 fi
 
-if [[ -z $(oc get secret ${TLS_USER} -n ${KAFKA_NS}) ]]
+if [[ -z $(oc get secret ${TLS_USER} -n ${KAFKA_NS} 2> /dev/null) ]]
 then
     defineUser ${TLS_USER} ${KAFKA_CLUSTER_NAME} tls-user ${ENVPATH}
     oc apply -k  $ENVPATH/overlays -n ${KAFKA_NS}
     sleep 5
     
 else
-    echo "${TLS_USER} present"
+    echo "${TLS_USER} presents"
 fi
 
-if [[ -z $(oc get secret ${SCRAM_USER}) ]]
+echo "##############"
+echo "Define secrets" 
+echo "##############"
+if [[ -z $(oc get secret ${SCRAM_USER} 2> /dev/null) ]]
 then
    # As the project is personal to the user, we can keep a generic name for the secret
    oc get secret ${TLS_USER} -n ${KAFKA_NS} -o json | jq -r '.metadata.name="tls-user"' | jq -r '.metadata.namespace="'${PROJECT_NAME}'"' | oc apply -f -
 fi
 
 
-if [[ -z $(oc get secret kafka-cluster-ca-cert) ]]
+if [[ -z $(oc get secret kafka-cluster-ca-cert 2> /dev/null) ]]
 then
     oc get secret ${KAFKA_CLUSTER_NAME}-cluster-ca-cert -n ${KAFKA_NS} -o json | jq -r '.metadata.name="kafka-cluster-ca-cert"' |jq -r '.metadata.namespace="'${PROJECT_NAME}'"' | oc apply -f -
 fi
 
 
-if [[ -z $(oc get secret postgresql-creds ) ]]
+if [[ -z $(oc get secret postgresql-creds 2> /dev/null) ]]
 then
   echo "#################"
   echo "Deploy postgresql"
@@ -107,7 +110,7 @@ then
 fi 
 
 echo "DEPLOY APPLICATION MICROSERVICES"
-oc apply -k apps/order-mgt
+oc apply -k apps/order-optim-use-case
 
 ### GET ROUTE FOR USER INTERFACE MICROSERVICE
 echo "User Interface Microservice is available via http://$(oc get route oc vaccine-order-mgt -o jsonpath='{.status.ingress[0].host}')"

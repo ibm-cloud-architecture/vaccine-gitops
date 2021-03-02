@@ -5,5 +5,5 @@ metadata:
 data:
   APP_VERSION: v0.0.3
   CONSUMER_GRP: vaccine-optimizer
-  SCHEMA_REGISTRY_URL: ""
+
   

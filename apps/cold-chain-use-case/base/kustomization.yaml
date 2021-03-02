@@ -1,0 +1,3 @@
+bases:
+  - ../../monitoring-agent
+  - ../../reefer-simulator

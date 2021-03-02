@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: vaccine-order-optimizer
-        image: ibmcase/vaccine-order-optimizer:0.0.2
+        image: ibmcase/vaccine-order-optimizer
         imagePullPolicy: Always
         ports:
         - containerPort: 5000
@@ -24,18 +24,22 @@ spec:
         envFrom:
           - configMapRef:
               name: vaccine-oro-cm
+          - configMapRef:
+              name: kafka-topics-cm
+          - secretRef:
+              name: vaccine-oro-secret
         resources:
           limits:
             cpu: 200m
             memory: 512Mi
         env:
           - name: KAFKA_USER
-            value: tls-user
+            value: scram-user
           - name: KAFKA_PASSWORD
             valueFrom:
               secretKeyRef:
                 key: password
-                name: tls-user 
+                name: scram-user 
           - name: KAFKA_CERT
             value: "/app/certs/ca.crt"
           - name: PYTHONUNBUFFERED
@@ -69,5 +73,5 @@ spec:
       volumes:
       - name: kafka-cert
         secret:
-          secretName: vaccine-kafka-cluster-ca-cert
+          secretName: kafka-cluster-ca-cert
           
