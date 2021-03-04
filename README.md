@@ -1,66 +1,138 @@
 # Gitops for vaccine solution
 
-This repository includes the gitops for the vaccine solution deployment and uses [Kustomize](https://kubernetes.io/docs/tasks/manage-kubernetes-objects/kustomization/) to define the Kubernetes resources needed to run the different use cases.
+This repository includes the gitops for the vaccine solution deployment and uses [Kustomize](https://kubernetes.io/docs/tasks/manage-kubernetes-objects/kustomization/) to define the Kubernetes resources needed to run the different use cases and environment.
 
-The tree has the following structure, with `infrastructure` to defile Kafka and Postgresql, `apps` to define application environment like secrets and configmaps, and the different components depending of the use cases (cold-chain, order-mgt) to demonstrate.
+The tree has the following structure, with `environment` to define Kafka and Postgresql, `apps` to define application components like secrets and configmaps, to use depending of the use cases (cold-chain, order-optimization) to demonstrate.
+
+## apps structure
+
+We can support three use cases in the current solution: cold chain monitoring, order management optimization  and anomaly detection. So the apps folder has those three use cases defined with kustomize and leverage all the component declarations.
 
 ```
-├── apps
-│   ├── cold-chain
+── apps
+│   ├── cold-chain-use-case
 │   │   ├── base
-│   │   │   ├── kustomization.yaml
-│   │   │   ├── monitoring-agent
-│   │   │   │   ├── configmap.yaml
-│   │   │   │   ├── deployment.yaml
-│   │   │   │   ├── rolebinding.yaml
-│   │   │   │   ├── route.yaml
-│   │   │   │   ├── secret.yaml
-│   │   │   │   ├── service-account.yaml
-│   │   │   │   └── service.yaml
-│   │   │   └── reefer-simulator
-│   │   │       ├── configmap.yaml
-│   │   │       ├── deployment.yaml
-│   │   │       ├── route.yaml
-│   │   │       └── service.yaml
+│   │   │   └── kustomization.yaml
 │   │   ├── kustomization.yaml
 │   │   └── overlays
+│   │       ├── kafka-topics.yaml
 │   │       └── kustomization.yaml
-│   └── order-mgt
-│       ├── base
-│       │   ├── kustomization.yaml
-│       │   ├── order-mgt
-│       │   │   ├── configmap.yaml
-│       │   │   └── deployconfig.yaml
-│       │   ├── transportation
-│       │   │   ├── configmap.yaml
-│       │   │   └── deployconfig.yaml
-│       │   ├── voro
-│       │   ├── voro-configmap.yaml
-│       │   └── voro-deployment.yaml
-│       ├── kustomization.yaml
-│       └── overlays
-│           └── kustomization.yaml
+│   ├── order-optim-use-case
+│   │   ├── base
+│   │   │   └── kustomization.yaml
+│   │   ├── kustomization.yaml
+│   │   └── overlays
+│   │       ├── kafka-topics.yaml
+│   │       └── kustomization.yaml
 ```
 
-In an attempt to create a CI process that minimizes the amount of infrastructure overhead, our CI process utilizes [GitHub Actions](https://github.com/features/actions) for automated docker image builds. 
+Then each component of the solution will have its own set of descriptors to deploy then independently. 
 
-Upon a code push to the `main` branch of a given repository, GitHub Actions will perform a docker build on the source code, create a new tag for the commit, tag the repository, tag the docker image, and push to the `ibmcase` Docker Hub organization.
+```
+── apps
+│   ├── monitoring-agent
+│   │   ├── base
+│   │   │   ├── configmap.yaml
+│   │   │   ├── deployment.yaml
+│   │   │   ├── rolebinding.yaml
+│   │   │   ├── route.yaml
+│   │   │   ├── secret.yaml
+│   │   │   ├── service-account.yaml
+│   │   │   └── service.yaml
+│   │   └── kustomization.yaml
+│   ├── order-mgt
+│   │   ├── base
+│   │   │   ├── configmap.yaml
+│   │   │   ├── deployconfig.yaml
+│   │   │   ├── rolebinding.yaml
+│   │   │   ├── route.yaml
+│   │   │   ├── secret.yaml
+│   │   │   └── service.yaml
+│   │   └── kustomization.yaml
+│   ├── reefer-simulator
+│   │   ├── base
+│   │   │   ├── configmap.yaml
+│   │   │   ├── deployment.yaml
+│   │   │   ├── route.yaml
+│   │   │   └── service.yaml
+│   │   └── kustomization.yaml
+│   ├── transportation
+│   │   ├── base
+│   │   │   ├── configmap.yaml
+│   │   │   ├── deployconfig.yaml
+│   │   │   ├── rolebinding.yaml
+│   │   │   ├── route.yaml
+│   │   │   ├── secret.yaml
+│   │   │   └── service.yaml
+│   │   └── kustomization.yaml
+│   └── voro
+│       ├── base
+│       │   ├── configmap.yaml
+│       │   ├── deployment.yaml
+│       │   ├── route.yaml
+│       │   ├── secret.yaml
+│       │   └── service.yaml
+│       └── kustomization.yaml
+```
 
-### Development environment (`dev`)
+In an attempt to create a CI process that minimizes the amount of infrastructure overhead, our CI process utilizes [GitHub Actions](https://github.com/features/actions) for automated docker image builds. So each of the component of the solution has a workflow to build the docker image: upon a code push to the `main` branch of a given repository, GitHub Actions will perform a docker build on the source code, create a new tag for the commit, tag the repository, tag the docker image, and push to the `ibmcase` Docker Hub organization.
 
-This environment is deployable to any Kubernetes or OpenShift cluster and provides its own dedicated backing services.
+## Environments
+
+The `environment` is deployable to any Kubernetes or OpenShift cluster and provides its own dedicated backing services.
 
 Prerequisites:
 
-- Strimzi operator must be installed, and configured to watch all namespaces.
-- You are logged intp the OpenShift Cluster with `oc login...`
+- Depending if you use Strimzi or EventStreams, or both those operators must be installed, and configured to watch all namespaces.
+- You are logged into the OpenShift Cluster with `oc login...`
 
-## Defining Kafka cluster, service account...
+```
+├── environments
+│   ├── event-streams
+│   │   ├── base
+│   │   │   ├── IBMCatalogSource.yaml
+│   │   │   ├── es-topics.yaml
+│   │   │   ├── eventstreams-minimal-prod.yaml
+│   │   │   ├── eventstreams-prod-3-brokers.yaml
+│   │   │   ├── kafka-configmap.yaml
+│   │   │   ├── kustomization\ copy.yaml
+│   │   │   ├── kustomization.yaml
+│   │   │   ├── namespace.yaml
+│   │   │   ├── scram-user\ copy.yaml
+│   │   │   ├── scram-user.yaml
+│   │   │   ├── tls-user\ copy.yaml
+│   │   │   └── tls-user.yaml
+│   │   ├── infrastructure
+│   │   │   ├── kustomization.yaml
+│   │   │   └── service-account.yaml
+│   │   └── overlays
+│   │       ├── kustomization.yaml
+│   │       └── user-patch.json
+│   ├── postgres
+│   │   ├── base
+│   │   │   ├── kustomization.yaml
+│   │   │   ├── statefulset.yaml
+│   │   │   ├── svc-headless.yaml
+│   │   │   └── svc.yaml
+│   │   ├── kustomization.yaml
+│   │   └── overlays
+│   │       ├── kustomization.yaml
+│   │       └── service-account-patch.yaml
+│   └── strimzi
+│       ├── base
+│       │   ├── kafka-cluster.yaml
+│       │   ├── kafka-topics.yaml
+│       │   ├── kafka-users.yaml
+│       │   └── kustomization.yaml
+│       └── kustomization.yaml
+```
 
-* One-time setup to create namespace, Kafka cluster and other entities:
+### Defining Strimzi Kafka cluster, service account
+
+* The following commands are a one-time setup to create namespace, Kafka cluster and other entities:
 
 ```shell
-oc apply -k environments/dev/infrastructure/
+oc apply -k environments/strimzi/
 # Verify the two pods are running
 oc get pods
 # NAME                          READY   STATUS    RESTARTS   AGE
@@ -72,11 +144,9 @@ oc get pods
 # vaccine-kafka-zookeeper-0                        1/1     Running   0          5m51s
 # vaccine-kafka-zookeeper-1                        1/1     Running   0          5m51s
 # vaccine-kafka-zookeeper-2                        1/1     Running   0          5m51s
-```
 
-* The following command is required only if targeting an OpenShift cluster
+# The following command is required only if targeting an OpenShift cluster
 
-```shell
 oc adm policy add-scc-to-user anyuid -z vaccine-runtime -n vaccine-solution
 ```
 
@@ -100,19 +170,36 @@ oc get kafkatopics
 # vaccine.transportation   vaccine-kafka   1            1                    True
 ```
 
-## Deploy postgresql
+### Deploy postgresql
 
 ```shell
 oc apply -k environments/dev/infrastructure/postgres
 ```
 
+### Deploy Event Streams
 
-## Deploying Vaccine cold chain monitoring components
+TBC
 
-## Deploying order management components
+## Deploy the different use cases
+
+### Deploying Vaccine cold chain monitoring use case
+
+Just run the following deploy scripts:
 
 ```shell
-oc apply -k ./apps/order-mgt
+./scripts/deployColdChainWithEventStreams.sh --skip-login
+```
+
+To delete the deployment
+
+```shell
+./scripts/deleleColdChain.sh
+```
+
+### Deploying order optimization use case
+
+```shell
+./scripts/deployOrderOptimWithEventStreams.sh --skip-login
 ```
 
 This should deploy the optimization and order mgt.
@@ -125,8 +212,8 @@ oc get pods
 # vaccineorderms-2-2lctx                 1/1     Running     0          6m30s
 ```
 
-## Delete deployment
+To delete the deployment
 
 ```shell
-oc delete -k ./apps/order-mgt
+./scripts/deleleOrderOptim.sh
 ```
