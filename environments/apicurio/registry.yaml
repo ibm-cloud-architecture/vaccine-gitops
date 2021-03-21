@@ -6,4 +6,4 @@ spec:
   configuration:
     persistence: "streams"
     streams:
-      bootstrapServers: "vaccine-kafka-kafka-bootstrap.vaccine-order.svc:9092"
+      bootstrapServers: "vaccine-kafka-kafka-bootstrap.jbsandbox.svc:9092"

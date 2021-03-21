@@ -1,22 +1,6 @@
 #!/bin/bash
 scriptDir=$(dirname $0)
 
-##################
-### PARAMETERS ###
-##################
-
-EVENTSTREAMS_NS=eventstreams
-
-source ${scriptDir}/env.sh
-
-###################################
-### DO NOT EDIT BELOW THIS LINE ###
-###################################
-### EDIT AT YOUR OWN RISK      ####
-###################################
-ENVPATH=environments/event-streams
-SA_NAME=vaccine-runtime
-
 ############
 ### MAIN ###
 ############
@@ -36,7 +20,12 @@ function createProjectAndServiceAccount {
     oc project ${YOUR_PROJECT_NAME}
     if [[ -z $(oc get sa | grep $SA_NAME) ]]
     then
-      oc apply -f ${ENVPATH}/infrastructure/service-account.yaml
+      oc apply -f - <<EOF
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: $SA_NAME
+EOF
       oc adm policy add-scc-to-user anyuid -z $SA_NAME -n ${YOUR_PROJECT_NAME}
     else
       echo "Found service account $SA_NAME"
