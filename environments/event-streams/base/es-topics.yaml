@@ -58,7 +58,18 @@ spec:
 apiVersion: eventstreams.ibm.com/v1beta1
 kind: KafkaTopic
 metadata:
-  name: vaccine.reefer
+  name: vaccine.reefers
+  namespace: eventstreams
+  labels:
+    eventstreams.ibm.com/cluster: eda-dev
+spec:
+  partitions: 1
+  replicas: 1
+---
+apiVersion: eventstreams.ibm.com/v1beta1
+kind: KafkaTopic
+metadata:
+  name: vaccine.reeferAlerts
   namespace: eventstreams
   labels:
     eventstreams.ibm.com/cluster: eda-dev

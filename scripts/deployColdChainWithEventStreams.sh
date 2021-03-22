@@ -4,10 +4,6 @@ scriptDir=$(dirname $0)
 ##################
 ### PARAMETERS ###
 ##################
-
-
-
-
 source ${scriptDir}/env.sh
 
 ###################################

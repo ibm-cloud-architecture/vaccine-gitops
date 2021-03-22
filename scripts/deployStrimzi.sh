@@ -12,7 +12,7 @@ scriptDir=$(dirname $0)
 OCP_ADMIN_USER=${OCP_ADMIN_USER:=admin}
 OCP_ADMIN_PASSWORD=${OCP_ADMIN_PASSWORD:=admin}
 
-source ${scriptDir}/env.sh
+source ${scriptDir}/env-strimzi.sh
 
 ###################################
 ### DO NOT EDIT BELOW THIS LINE ###
