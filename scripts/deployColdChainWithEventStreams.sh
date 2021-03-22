@@ -37,7 +37,17 @@ echo "#####################################################"
 echo "Create secret for topic name and bootstrap server URL"
 echo "#####################################################"
 
-KAFKA_BOOTSTRAP=$(oc get route -n ${KAFKA_NS} ${KAFKA_CLUSTER_NAME}-kafka-bootstrap -o jsonpath="{.status.ingress[0].host}:443")
+if [[ -z $(oc get secret freezer-mgr-secret 2> /dev/null) ]]
+then
+    oc create secret generic freezer-mgr-secret \
+    --from-literal=KAFKA_BOOTSTRAP_SERVERS=$INTERNAL_KAFKA_BOOTSTRAP_SERVERS \
+    --from-literal=REEFER_TOPIC=$YOUR_REEFER_TOPIC \
+    --from-literal=ALERTS_TOPIC=$YOUR_ALERT_TOPIC \
+    --from-literal=KAFKA_USER=$TLS_USER \
+    --from-literal=KAFKA_CA_CERT_NAME:kafka-cluster-ca-cert 
+fi
+
+
 if [[ -z $(oc get secret reefer-simul-secret) ]]
 then
     oc create secret generic reefer-simul-secret --from-literal=KAFKA_BOOTSTRAP_SERVERS=$EXTERNAL_KAFKA_BOOTSTRAP_SERVERS --from-literal=KAFKA_MAIN_TOPIC=$YOUR_TELEMETRIES_TOPIC

@@ -14,6 +14,7 @@ YOUR_SUFFIX=jb
 YOUR_PROJECT_NAME=vaccine-solution
 YOUR_TELEMETRIES_TOPIC=reefer.telemetries
 YOUR_REEFER_TOPIC=vaccine.reefers
+YOUR_ALERT_TOPIC=vaccine.reeferalerts
 YOUR_SHIPMENT_PLAN_TOPIC=vaccine.shipment.plans
 EXTERNAL_KAFKA_BOOTSTRAP_SERVERS=eda-dev-kafka-bootstrap-eventstreams.assets-arch-eda-6ccd7f378ae819553d37d5f2ee142bd6-0000.us-east.containers.appdomain.cloud:443
 INTERNAL_KAFKA_BOOTSTRAP_SERVERS=eda-dev-kafka-bootstrap.eventstreams.svc:9093
