@@ -4,5 +4,5 @@ metadata:
   name: reefer-simul-cm
 data:
     KAFKA_MAIN_TOPIC: reefer.telemetries
-    FREEZER_MGR_URL: http://freezer-mgr.jbsandbox.svc
+    FREEZER_MGR_URL: http://freezer-mgr-jbsandbox.assets-arch-eda-6ccd7f378ae819553d37d5f2ee142bd6-0000.us-east.containers.appdomain.cloud
     

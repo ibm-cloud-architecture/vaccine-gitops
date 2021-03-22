@@ -8,5 +8,6 @@ data:
   SHIPMENT_PLAN_TOPIC: "vaccine.shipment.plans"
   INVENTORY_TOPIC:  "vaccine.inventory"
   TRANSPORTATION_TOPIC:  "vaccine.transportation"
-  REEFER_TOPIC:  "vaccine.reefer"
+  REEFER_TOPIC:  "vaccine.reefers"
+  ALERS_TOPIC:  "vaccine.reeferalerts"
   
