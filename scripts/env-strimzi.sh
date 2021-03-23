@@ -10,9 +10,9 @@ OCP_ADMIN_PASSWORD=${OCP_ADMIN_PASSWORD:=admin}
 # if you change cluster name then you need to change the strimzi yaml files.
 KAFKA_CLUSTER_NAME=vaccine-kafka
 # project name / namespace where event streams or kafka is defined
-KAFKA_NS=jbvaccine
+KAFKA_NS=vaccine-solution
 YOUR_SUFFIX=jb
-YOUR_PROJECT_NAME=jbvaccine
+YOUR_PROJECT_NAME=vaccine-solution
 YOUR_TELEMETRIES_TOPIC=reefer.telemetries
 YOUR_REEFER_TOPIC=vaccine.reefers
 YOUR_ALERT_TOPIC=vaccine.reeferalerts
