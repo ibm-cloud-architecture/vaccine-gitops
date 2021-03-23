@@ -44,7 +44,7 @@ then
     --from-literal=REEFER_TOPIC=$YOUR_REEFER_TOPIC \
     --from-literal=ALERTS_TOPIC=$YOUR_ALERT_TOPIC \
     --from-literal=KAFKA_USER=$TLS_USER \
-    --from-literal=KAFKA_CA_CERT_NAME:kafka-cluster-ca-cert 
+    --from-literal=KAFKA_CA_CERT_NAME=kafka-cluster-ca-cert 
 fi
 
 
