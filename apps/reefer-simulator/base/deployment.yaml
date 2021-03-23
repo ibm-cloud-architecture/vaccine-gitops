@@ -17,7 +17,7 @@ spec:
       containers:
       - name: vaccine-reefer-simulator
         image: quay.io/ibmcase/vaccine-reefer-simulator:latest
-        imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 5000
           protocol: TCP

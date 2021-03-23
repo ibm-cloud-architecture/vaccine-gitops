@@ -2,6 +2,8 @@ apiVersion: kafka.strimzi.io/v1beta1
 kind: Kafka
 metadata:
   name: vaccine-kafka
+  labels:
+    app: strimzi
 spec:
   kafka:
     version: 2.6.0

@@ -75,7 +75,7 @@ spec:
         - secretRef:
             name: freezer-mgr-secret
         image: quay.io/ibmcase/vaccine-freezer-mgr
-        imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
         livenessProbe:
           failureThreshold: 3
           httpGet:

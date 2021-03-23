@@ -50,14 +50,17 @@ fi
 
 if [[ -z $(oc get secret reefer-simul-secret) ]]
 then
-    oc create secret generic reefer-simul-secret --from-literal=KAFKA_BOOTSTRAP_SERVERS=$EXTERNAL_KAFKA_BOOTSTRAP_SERVERS --from-literal=KAFKA_MAIN_TOPIC=$YOUR_TELEMETRIES_TOPIC
+    oc create secret generic reefer-simul-secret \
+    --from-literal=KAFKA_BOOTSTRAP_SERVERS=$EXTERNAL_KAFKA_BOOTSTRAP_SERVERS \
+    --from-literal=KAFKA_MAIN_TOPIC=$YOUR_TELEMETRIES_TOPIC \
+    --from-literal=FREEZER_MGR_URL=$FREEZER_MGR_URL
+
 fi
 if [[ -z $(oc get secret reefer-monitoring-agent-secret 2> /dev/null) ]]
 then
     oc create secret generic reefer-monitoring-agent-secret \
     --from-literal=KAFKA_BOOTSTRAP_SERVERS=$INTERNAL_KAFKA_BOOTSTRAP_SERVERS \
-    --from-literal=TELEMETRY_TOPIC=$YOUR_TELEMETRIES_TOPIC \
-    --from-literal=REEFER_TOPIC=$YOUR_REEFER_TOPIC \
+    --from-literal=PREDICTION_ENABLED=$PREDICTION_ENABLED \
     --from-literal=CP4D_USER=$YOUR_CP4D_USER \
     --from-literal=CP4D_API_KEY=$YOUR_CP4D_API_KEY \
     --from-literal=CP4D_AUTH_URL=$YOUR_CP4D_AUTH_URL \
@@ -108,7 +111,7 @@ echo "DEPLOY APPLICATION MICROSERVICES"
 oc apply -k apps/cold-chain-use-case
 
 ### GET ROUTE FOR USER INTERFACE MICROSERVICE
-echo "User Interface Microservice is available via http://$(oc get route oc vaccine-reefer-simulator -o jsonpath='{.status.ingress[0].host}')"
+echo "User Interface Microservice is available via http://$(oc get route vaccine-reefer-simulator -o jsonpath='{.status.ingress[0].host}')"
 
 
 echo "#############"

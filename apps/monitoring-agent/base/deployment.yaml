@@ -10,7 +10,7 @@ metadata:
     app: reefer-monitoring-agent
   name: reefer-monitoring-agent
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app.kubernetes.io/name: reefer-monitoring-agent
@@ -76,7 +76,7 @@ spec:
         - secretRef:
             name: reefer-monitoring-agent-secret
         image: quay.io/ibmcase/reefer-monitoring-agent
-        imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
         livenessProbe:
           failureThreshold: 3
           httpGet:

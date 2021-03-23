@@ -11,7 +11,7 @@ function createProjectAndServiceAccount {
     echo ###############################
     echo # Create project if not exist #
     echo ###############################
-    PROJECT_EXIST=$(oc get ns $YOUR_PROJECT_NAME)
+    PROJECT_EXIST=$(oc get ns $YOUR_PROJECT_NAME 2> /dev/null)
     if [[ -z  $PROJECT_EXIST ]]
     then
         echo "Create $YOUR_PROJECT_NAME"
