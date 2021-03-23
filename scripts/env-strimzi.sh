@@ -9,9 +9,9 @@ OCP_ADMIN_USER=${OCP_ADMIN_USER:=admin}
 OCP_ADMIN_PASSWORD=${OCP_ADMIN_PASSWORD:=admin}
 KAFKA_CLUSTER_NAME=vaccine-kafka
 # project name / namespace where event streams or kafka is defined
-KAFKA_NS=jbsandbox
+KAFKA_NS=vaccine-solution
 YOUR_SUFFIX=jb
-YOUR_PROJECT_NAME=jbsandbox
+YOUR_PROJECT_NAME=vaccine-solution
 YOUR_TELEMETRIES_TOPIC=reefer.telemetries
 YOUR_REEFER_TOPIC=vaccine.reefers
 YOUR_ALERT_TOPIC=vaccine.reeferalerts
